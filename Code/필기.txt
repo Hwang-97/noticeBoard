@@ -1,0 +1,134 @@
+주제
+1. 게시판
+2. 회원(인증)
+3. 부가 기능
+4. Bootstrap + jQuery
+5. JSP Model 2(MVC 디자인 패턴)
+
+새 프로젝트 생성
+> New > Dynamic Web Project > "Code" > 톰캣(8.5), Module(3.1) > Context root("code"), web.xml(체크) > Finish
+
+설정
+1. 폴더 구조 생성 + 라이브러리 설치
+	a. 자바 라이브러리
+		1. JDBC
+			- webapp > WEB-INF > lib > ojdbc6.jar 복사
+		2. JSTL
+			- webapp > WEB-INF > lib > jstl-1.2.jar 복사
+		3. DBUtil
+			- webapp > WEB-INF > lib > mylibrary.jar 복사 
+	b. 클라이언트 라이브러리
+		1. jQuery
+			- webapp > asset 복사
+		2. Bootstrap
+			- webapp > asset 복사
+
+2. 패키지 구조 생성(서블릿) + 뷰 구조 생성(JSP)
+	a. 패키지 구조
+		- "com.test.main" > 메인
+		- "com.test.main.board" > 게시판
+		- "com.test.main.member" > 회원
+		- "com.test.main.etc" > 부가 기능
+		//- "com.test.main.db" > DAO, DTO (X)
+	b. 뷰 구조
+		- webapp > WEB-INF > "views" 뷰 루트 폴더(main 패키지)
+								 - views > "board" 게시판
+								 - views > "member" 회원
+								 - views > "etc" 부가 기능
+								 - views > "inc" 조각 페이지
+			
+3. 파일 생성
+	a. 클래스
+		1. com.test.main
+			- Main.java(S) > 초기 페이지
+			- Template.java(S) > 템플릿 페이지
+		2. com.test.main.board
+			- List.java(S) > 목록
+			- Add.java(S) > 글쓰기(폼)
+			- AddOk.java(S) > 글쓰기(처리)
+			- View.java(S) > 글보기
+			- Edit.java(S) > 수정하기(폼)
+			- EditOk.java(S) > 수정하기(처리)
+			- Del.java(S) > 삭제하기(폼)
+			- DelOk.java(S) > 삭제하기(처리)
+			- BoardDAO.java > DAO
+			- BoardDTO.java > DTO
+		3. com.test.main.member
+			- Member.java(S) > 초기 페이지
+			- Login.java(S) > 로그인(폼)
+			- LoginOk.java(S) > 로그인(처리)
+			- LogoutOk.java(S) > 로그아웃(처리)
+			- MemberDAO.java > DAO
+			- MemberDTO.java > DTO
+			
+	b. 뷰페이지
+		1. views
+			- main.jsp > 초기 페이지
+			- template.jsp > 템플릿 페이지
+		2. views > board
+			- list.jsp > 목록
+			- add.jsp > 글쓰기(폼)
+			- addok.jsp > 글쓰기(처리)
+			- view.jsp > 글보기
+			- edit.jsp > 수정하기(폼)
+			- editok.jsp > 수정하기(처리)
+			- del.jsp > 삭제하기(폼)
+			- delok.jsp > 삭제하기(처리)
+		3. views > member
+			- member.jsp > 초기페이지
+			- login.jsp > 로그인(폼)
+			- loginok.jsp > 로그인(처리)
+			- logout.jsp > 로그아웃(처리)
+		4. views > inc
+			- header.jsp > 상단부
+			- footer.jsp > 하단부
+			- asset.jsp > 클라이언트 라이브러리
+
+4. URL 구조
+	- "/code/main.do" 메인(시작 페이지)
+	- "/code/board/xxx.do" 게시판
+		- "/code/board/list.do" 목록
+		- "/code/board/add.do" 글쓰기(폼)
+		- "/code/board/addok.do" 글쓰기(처리)
+		- "/code/board/view.do" 글보기
+		..
+	- "/code/member/xxx.do" 회원
+	- "/code/etc/xxx.do" 부가기능
+
+5. DB 관련
+	- DAO
+	- DTO
+
+---------------------------------------------------- 기초 작업 + 공통 작업
+
+6. 각 파트별 업무 구현
+	a. 로그인, 로그아웃
+	b. 게시판
+	c. 부가기능
+
+
+7. 정책
+	a. 로그인O
+		- 모든 행동
+	b. 로그인X
+		- 목록보기O
+		- 글보기O
+		- 글쓰기X
+		- 수정하기X
+		- 삭제하기X	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
