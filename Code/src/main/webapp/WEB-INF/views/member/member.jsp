@@ -41,7 +41,9 @@
 								
 					<c:if test="${not empty id}">
 					<div class="info">
-						<span class="label label-primary">lv${lv}</span> ${id}(${name})
+						<div><span class="label label-primary">lv${lv}</span> ${id}(${name})</div>
+						<div style="margin-top:10px;">작성한 게시물수: ${count}개</div>
+						<div>작성한 댓글수: 0개</div>
 					</div>
 					
 					<input type="button" value="로그아웃"

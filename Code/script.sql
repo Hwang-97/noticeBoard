@@ -52,7 +52,8 @@ create or replace view vwBoard
 as
 select 
     seq, subject, id, (select name from tblUser where id = tblBoard.id) as name, regdate, readcount,
-    (sysdate - regdate) as isnew
+    (sysdate - regdate) as isnew,
+    content
     from tblBoard;
 
 
@@ -75,6 +76,11 @@ insert into tblBoard (seq, id, subject, content, regdate, readcount, userip)
     values (seqBoard.nextVal, 'hong', '게시만 계속 만드는 중입니다..', '내용입니다.', to_date('2022-01-13 11:20:00', 'yyyy-mm-dd hh24:mi:ss'), default, '127.0.0.1');
 
 commit;
+
+
+
+
+select tblBoard.*, (select name from tblUser where id = tblBoard.id) as name from tblBoard;
 
 
 

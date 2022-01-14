@@ -16,6 +16,21 @@ public class View extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
+		
+		String column = req.getParameter("column");
+		String word = req.getParameter("word");
+		String searchmode = "n";
+		
+		if ((column == null && word == null) 
+				|| (column.equals("") && word.equals(""))) {
+			searchmode = "n";
+		} else {
+			searchmode = "y";
+		}
+		
+		
+		
+		
 		//할일
 		//1. 데이터 가져오기(seq)
 		//2. DB 작업 > select > DAO 위임
@@ -56,14 +71,28 @@ public class View extends HttpServlet {
 		//제목과 내용에 들어있는 태그를 비활성화
 		dto.setSubject(dto.getSubject().replace("<", "&lt;").replace(">", "&gt;"));
 		dto.setContent(dto.getContent().replace("<", "&lt;").replace(">", "&gt;"));
-		
-		
+				
 		//개행 문자 처리
 		dto.setContent(dto.getContent().replace("\r\n", "<br>"));
 		
 		
+		//내용에서 검색 중 > 검색어 강조!!
+		if (searchmode.equals("y") && column.equals("content")) {
+			
+			//안녕하세요. 홍길동입니다.
+			//안녕하세요. <span style="">홍길동</span>입니다.
+			dto.setContent(dto.getContent().replace(word, "<span style='background-color:yellow;color:tomato;'>" + word + "</span>"));
+		}
+		
+		
+		
+		
+		
 		//3.
 		req.setAttribute("dto", dto);
+		
+		req.setAttribute("column", column);
+		req.setAttribute("word", word);
 
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/board/view.jsp");
 		dispatcher.forward(req, resp);

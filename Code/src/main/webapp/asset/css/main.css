@@ -22,7 +22,7 @@ html {
 .main {
 	background-color: #FFF;
 	width: 800px;
-	height: 100vh;
+	min-height: 800px; /* 100vh; */
 	border-left: 1px solid #999;
 	border-right: 1px solid #999;
 	margin: 0px auto;

@@ -3,6 +3,7 @@ package com.test.main.board;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,6 +19,27 @@ public class List extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
+		
+		//호출
+		//1. list.do > 목록보기
+		//2. list.do?column=subject&word=테스트 > 검색하기
+		String column = req.getParameter("column");
+		String word = req.getParameter("word");
+		String searchmode = "n";
+		
+		if ((column == null && word == null) 
+				|| (column.equals("") && word.equals(""))) {
+			searchmode = "n";
+		} else {
+			searchmode = "y";
+		}
+		
+		//DTO > HashMap
+		HashMap<String,String> map = new HashMap<String,String>();
+		map.put("column", column);
+		map.put("word", word);
+		map.put("searchmode", searchmode);
+		
 		//할일
 		//1. DB 작업 > select > DAO 위임
 		//1.5 데이터 조작
@@ -27,7 +49,7 @@ public class List extends HttpServlet {
 		
 		//1.
 		BoardDAO dao = new BoardDAO();
-		ArrayList<BoardDTO> list = dao.list();
+		ArrayList<BoardDTO> list = dao.list(map);
 		
 		//1.5
 		Calendar now = Calendar.getInstance();
@@ -48,6 +70,15 @@ public class List extends HttpServlet {
 				dto.setSubject(dto.getSubject().substring(0, 20) + "..");
 			}
 			
+			
+			//제목에서 검색 중 > 검색어 강조!!
+			if (searchmode.equals("y") && column.equals("subject")) {
+				
+				//안녕하세요. 홍길동입니다.
+				//안녕하세요. <span style="">홍길동</span>입니다.
+				dto.setSubject(dto.getSubject().replace(word, "<span style='background-color:yellow;color:tomato;'>" + word + "</span>"));
+			}
+			
 		}
 		
 		
@@ -61,6 +92,7 @@ public class List extends HttpServlet {
 		
 		//2.
 		req.setAttribute("list", list);
+		req.setAttribute("map", map);
 
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/board/list.jsp");
 		dispatcher.forward(req, resp);

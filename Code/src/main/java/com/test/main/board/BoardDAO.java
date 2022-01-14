@@ -5,6 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 
 import com.test.jdbc.DBUtil;
 
@@ -44,6 +47,11 @@ public class BoardDAO {
 			pstat.setString(4, dto.getUserip());  //X
 			
 			return pstat.executeUpdate();
+			
+			
+//			String sql = String.format("insert into tblBoard (seq, id, subject, content, regdate, readcount, userip) values (seqBoard.nextVal, '%s', '%s', '%s', default, default, '%s')", dto.getId(), dto.getSubject().replace("'", "''"), dto.getContent().replace("'", "''"), dto.getUserip());
+//			
+//			return stat.executeUpdate(sql);
 
 		} catch (Exception e) {
 			System.out.println("BoardDAO.add()");
@@ -55,11 +63,19 @@ public class BoardDAO {
 
 	
 	//List 서블릿이 목록주세요~ 라고 요청
-	public ArrayList<BoardDTO> list() {
+	public ArrayList<BoardDTO> list(HashMap<String, String> map) {
 		
 		try {
 
-			String sql = "select * from vwBoard order by seq desc";
+			String where = "";
+			
+			if (map.get("searchmode").equals("y")) {
+				where = String.format("where %s like '%%%s%%'"
+								, map.get("column")
+								, map.get("word").replace("'", "''"));
+			}
+			
+			String sql = String.format("select * from vwBoard %s order by seq desc", where);
 			
 			rs = stat.executeQuery(sql);
 			
@@ -143,6 +159,47 @@ public class BoardDAO {
 			e.printStackTrace();
 		}		
 		
+	}
+
+	//EditOk 서블릿이 DTO를 줄테니 수정해주세요~
+	public int edit(BoardDTO dto) {
+
+		try {
+
+			String sql = "update tblBoard set subject = ?, content = ? where seq = ?";
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, dto.getSubject());
+			pstat.setString(2, dto.getContent());
+			pstat.setString(3, dto.getSeq());
+			
+			return pstat.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println("BoardDAO.edit()");
+			e.printStackTrace();
+		}
+		
+		return 0;
+	}
+
+	//DelOk 서블릿이 글번호를 줄테니 글을 삭제주세요~
+	public int del(String seq) {
+		
+		try {
+
+			String sql = "delete from tblBoard where seq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			
+			return pstat.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println("BoardDAO.del()");
+			e.printStackTrace();
+		}
+		
+		return 0;
 	}
 	
 }
