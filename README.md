@@ -10,7 +10,9 @@ ___
 <hr>
 <br>기초적인 CRUD를 구현하였으며 게시물 마다 조회수, 검색 등 기초가 되는 모든 기능을 구현되어 있습니다.
 <hr>
-![화면 캡처 2022-01-16 032557](https://user-images.githubusercontent.com/85034286/149633449-d789ef55-e633-4250-97a3-9b9a9960f10d.png)
+![화면 캡처 2022-01-16 032557](https://user-images.githubusercontent.com/85034286/149633449-d789ef55-e633-4250-97a3-9b9a9960f10d.png)<br>
+![화면 캡처 2022-01-16 032557](https://user-images.githubusercontent.com/85034286/149633481-85bba388-98b0-4e66-9593-8f94ee1a8961.png)<br>
+![화면 캡처 2022-01-16 032557](https://user-images.githubusercontent.com/85034286/149633516-24f513ff-00d3-4c71-9b89-b23110460398.png)<br>
 ![Alt text](https://user-images.githubusercontent.com/85034286/149633152-5f050071-2859-47dd-8a4c-6a2639a58b75.png)<br>
 ![image](https://user-images.githubusercontent.com/85034286/149633152-5f050071-2859-47dd-8a4c-6a2639a58b75.png)<br>
 ![image](https://user-images.githubusercontent.com/85034286/149633189-98745b4d-7700-4a3a-83db-9ed95c8116be.png)<br>
