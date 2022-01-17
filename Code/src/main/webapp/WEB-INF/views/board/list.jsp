@@ -43,7 +43,11 @@
 					<td>${dto.seq}</td>
 					<td>
 					
-						<a href="/code/board/view.do?seq=${dto.seq}&column=${map.column}&word=${map.word}">${dto.subject}</a>
+						<a href="/code/board/view.do?seq=${dto.seq}&column=${map.column}&word=${map.word}&page=${nowPage}">${dto.subject}</a>
+						
+						<c:if test="${dto.commentcount > 0}">
+						<span class="badge">${dto.commentcount}</span>
+						</c:if>
 						
 						<c:if test="${dto.isnew <= 1}">
 						<span class="label label-danger">new</span>
@@ -60,6 +64,8 @@
 				</tr>
 				</c:if>
 			</table>
+			
+			<div class="pagebar">${pagebar}</div>
 			
 			<div class="search">
 				<form method="GET" action="/code/board/list.do">

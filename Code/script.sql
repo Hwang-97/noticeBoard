@@ -53,8 +53,13 @@ as
 select 
     seq, subject, id, (select name from tblUser where id = tblBoard.id) as name, regdate, readcount,
     (sysdate - regdate) as isnew,
-    content
+    content,
+    (select count(*) from tblComment where bseq = tblBoard.seq) as commentcount
     from tblBoard;
+
+
+-- 페이징 작업
+
 
 
 
@@ -81,6 +86,37 @@ commit;
 
 
 select tblBoard.*, (select name from tblUser where id = tblBoard.id) as name from tblBoard;
+
+
+drop table tblComment;
+
+-- 댓글 테이블
+create table tblComment (
+    seq number primary key,                             --댓글번호(PK)
+    id varchar2(30) not null references tblUser(id),    --작성자(id)
+    content varchar2(1000) not null,                    --댓글내용
+    regdate date default sysdate not null,              --작성날짜
+    bseq number not null references tblBoard(seq)       --부모글(FK) > 게시판의 게시물
+);
+
+create sequence seqComment;
+
+insert into tblComment (seq, id, content, regdate, bseq) values (seqComment.nextVal, 'hong', '댓글입니다.', default, 25);
+
+select * from tblComment where bseq = 25; -- 어떤 글을 볼때 그 글에 달려있는 댓글 목록
+
+update tblComment set content = '내용 수정' where seq = 1;
+
+delete from tblComment where seq = 1;
+
+commit;
+
+
+
+
+
+
+
 
 
 

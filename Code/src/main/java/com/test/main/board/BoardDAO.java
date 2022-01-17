@@ -70,12 +70,12 @@ public class BoardDAO {
 			String where = "";
 			
 			if (map.get("searchmode").equals("y")) {
-				where = String.format("where %s like '%%%s%%'"
+				where = String.format("and %s like '%%%s%%'"
 								, map.get("column")
 								, map.get("word").replace("'", "''"));
 			}
 			
-			String sql = String.format("select * from vwBoard %s order by seq desc", where);
+			String sql = String.format("select * from (select rownum as rnum, a.* from (select * from vwBoard order by seq desc) a) where rnum between %s and %s %s order by seq desc", map.get("begin"), map.get("end"), where);
 			
 			rs = stat.executeQuery(sql);
 			
@@ -93,6 +93,8 @@ public class BoardDAO {
 				dto.setReadcount(rs.getInt("readcount"));
 				
 				dto.setIsnew(rs.getDouble("isnew"));
+				
+				dto.setCommentcount(rs.getInt("commentcount"));				
 				
 				list.add(dto);
 			}
@@ -200,6 +202,140 @@ public class BoardDAO {
 		}
 		
 		return 0;
+	}
+
+	
+	//AddCommentOk 서블릿이 CommentDTO를 줄테니 insert해주세요~
+	public int addComment(CommentDTO cdto) {
+		
+		try {
+
+			String sql = "insert into tblComment (seq, id, content, regdate, bseq) values (seqComment.nextVal, ?, ?, default, ?)";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, cdto.getId());
+			pstat.setString(2, cdto.getContent());
+			pstat.setString(3, cdto.getBseq());
+			
+			return pstat.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println("BoardDAO.addComment()");
+			e.printStackTrace();
+		}
+		
+		return 0;
+	}
+
+	
+	//View 서블릿이 글번호를 줄테니 그 글에 딸린 댓글 목록을 주세요~
+	public ArrayList<CommentDTO> listComment(String seq) {
+		
+		try {
+
+			String sql = "select tblComment.*, (select name from tblUser where id = tblComment.id) as name from tblComment where bseq = ? order by seq desc";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			
+			rs = pstat.executeQuery();
+			
+			ArrayList<CommentDTO> clist = new ArrayList<CommentDTO>();
+			
+			while (rs.next()) {
+				//레코드 1줄 > DTO 1개
+				CommentDTO dto = new CommentDTO();
+				
+				dto.setSeq(rs.getString("seq"));
+				dto.setContent(rs.getString("content"));
+				dto.setId(rs.getString("id"));
+				dto.setName(rs.getString("name"));
+				dto.setRegdate(rs.getString("regdate"));
+				dto.setBseq(rs.getString("bseq"));
+				
+				clist.add(dto);
+			}
+			
+			return clist;
+
+		} catch (Exception e) {
+			System.out.println("BoardDAO.listComment()");
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+
+	//DelCommentOk 서블릿이 댓글 번호를 줄테니 삭제해주세요~
+	public int delComment(String seq) {
+		
+		try {
+
+			String sql = "delete from tblComment where seq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			
+			return pstat.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println("BoardDAO.delComment()");
+			e.printStackTrace();
+		}
+		
+		return 0;
+	}
+
+	
+	//DelOk 서블릿이 부모 글번호를 줄테니 달린 댓글을 모두 삭제해주세요~
+	public void delCommentAll(String seq) {
+		
+		try {
+
+			String sql = "delete from tblComment where bseq = ?";
+			
+			//cascade > X
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			
+			pstat.executeUpdate();			
+
+		} catch (Exception e) {
+			System.out.println("BoardDAO.delCommentAll()");
+			e.printStackTrace();
+		}
+		
+	}
+
+	
+	//List 서블릿이 게시물이 몇개인지 알려주세요~
+	public int getTotalCount(HashMap<String, String> map) {
+		
+		try {
+
+			String where = "";
+			
+			if (map.get("searchmode").equals("y")) {
+				where = String.format("where %s like '%%%s%%'"
+								, map.get("column")
+								, map.get("word").replace("'", "''"));
+			}
+			
+			String sql = "select count(*) as cnt from vwBoard" + where;
+			
+			rs = stat.executeQuery(sql);
+			
+			if (rs.next()) {
+				return rs.getInt("cnt");
+			}
+			
+		} catch (Exception e) {
+			System.out.println("BoardDAO.getTotalCount()");
+			e.printStackTrace();
+		}
+		
+		return 0;
+		
 	}
 	
 }

@@ -14,6 +14,14 @@ public class BoardDTO {
 	private String name; //작성자 이름
 	private double isnew; //새글 유무
 	
+	private int commentcount; //댓글 갯수
+	
+	public int getCommentcount() {
+		return commentcount;
+	}
+	public void setCommentcount(int commentcount) {
+		this.commentcount = commentcount;
+	}
 	public double getIsnew() {
 		return isnew;
 	}

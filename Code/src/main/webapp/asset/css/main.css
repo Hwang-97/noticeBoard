@@ -132,6 +132,63 @@ html {
 
 
 
+/* 댓글 */
+.addcomment {
+	width: 600px;
+	margin: 0 auto;
+	margin-top: 35px;
+	margin-bottom: 20px;
+}
+
+.addcomment textarea {
+	resize: none;
+	width: 500px;
+	height: 100px;
+}
+
+.table.comment {
+	width: 600px;
+	margin: 20px auto;
+	margin-bottom: 100px;
+}
+
+.table.comment td:nth-child(1) {
+	width: 500px;
+	position: relative;
+	left: 0;
+	top: 0;
+	padding-bottom: 25px;
+}
+
+.table.comment td:nth-child(1) small {
+	color: #888;
+	position: absolute;
+	right: 10px;
+	bottom: 5px;
+}
+
+.table.comment td:nth-child(2) {
+	text-align: center;
+}
+
+
+
+/* 페이지바 */
+.pagebar {
+	text-align: center;
+	margin-top: 20px; 
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

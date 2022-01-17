@@ -44,7 +44,7 @@
 			
 				<input type="button" value="돌아가기"
 					class="btn btn-default"
-					onclick="location.href='/code/board/list.do?column=${column}&word=${word}';">
+					onclick="location.href='/code/board/list.do?column=${column}&word=${word}&page=${page}';">
 				
 				<c:if test="${not empty id && dto.id == id}">
 				<input type="button" value="수정하기"
@@ -56,6 +56,35 @@
 					onclick="location.href='/code/board/del.do?seq=${dto.seq}';">
 				</c:if>						
 			</div>
+			
+			
+			
+			<form method="POST" action="/code/board/addcommentok.do">
+			<table class="addcomment">
+				<tr>
+					<td><textarea name="content" class="form-control" required></textarea></td>
+					<td><input type="submit" value="댓글쓰기" class="btn btn-primary"></td>
+				</tr>
+			</table>
+			<input type="hidden" name="bseq" value="${dto.seq}">
+			</form>
+			
+			<table class="table table-bordered comment">
+				<c:forEach items="${clist}" var="cdto">
+				<tr>
+					<td>
+						${cdto.content}
+						<small>${cdto.name}(${cdto.id}) ${cdto.regdate}</small></td>
+					<td>
+						<c:if test="${cdto.id == id}">
+						<input type="button" value="삭제하기" 
+							class="btn btn-default"
+							onclick="location.href='/code/board/delcommentok.do?seq=${cdto.seq}&bseq=${dto.seq}';">
+						</c:if>
+					</td>
+				</tr>
+				</c:forEach>
+			</table>
 			
 			
 		</section>
