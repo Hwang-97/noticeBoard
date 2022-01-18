@@ -22,16 +22,22 @@ public class Member extends HttpServlet {
 		
 		//1.
 		int count = 0;
+		int ccount = 0;
 		
 		HttpSession session = req.getSession();
 		
 		if (session.getAttribute("id") != null) {
+			
 			MemberDAO dao = new MemberDAO();
+			
 			count = dao.getCount(session.getAttribute("id").toString());
+			ccount = dao.getCcount(session.getAttribute("id").toString());
+			
 		}
 		
 		//2.
 		req.setAttribute("count", count);
+		req.setAttribute("ccount", ccount);
 
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/member/member.jsp");
 		dispatcher.forward(req, resp);

@@ -35,6 +35,10 @@
 				<input type="submit" value="글쓰기"
 					class="btn btn-primary">										
 			</div>
+			
+			<input type="hidden" name="reply" value="${reply}">
+			<input type="hidden" name="thread" value="${thread}">
+			<input type="hidden" name="depth" value="${depth}">
 			</form>
 			
 		</section>

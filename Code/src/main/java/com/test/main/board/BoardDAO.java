@@ -38,13 +38,16 @@ public class BoardDAO {
 		
 		try {
 
-			String sql = "insert into tblBoard (seq, id, subject, content, regdate, readcount, userip) values (seqBoard.nextVal, ?, ?, ?, default, default, ?)";
+			String sql = "insert into tblBoard (seq, id, subject, content, regdate, readcount, userip, thread, depth) values (seqBoard.nextVal, ?, ?, ?, default, default, ?, ?, ?)";
 			pstat = conn.prepareStatement(sql);
 			
 			pstat.setString(1, dto.getId());      //X
 			pstat.setString(2, dto.getSubject()); //O
 			pstat.setString(3, dto.getContent()); //O
 			pstat.setString(4, dto.getUserip());  //X
+			
+			pstat.setInt(5, dto.getThread());
+			pstat.setInt(6, dto.getDepth());
 			
 			return pstat.executeUpdate();
 			
@@ -70,12 +73,12 @@ public class BoardDAO {
 			String where = "";
 			
 			if (map.get("searchmode").equals("y")) {
-				where = String.format("and %s like '%%%s%%'"
+				where = String.format("where %s like '%%%s%%'"
 								, map.get("column")
 								, map.get("word").replace("'", "''"));
 			}
 			
-			String sql = String.format("select * from (select rownum as rnum, a.* from (select * from vwBoard order by seq desc) a) where rnum between %s and %s %s order by seq desc", map.get("begin"), map.get("end"), where);
+			String sql = String.format("select * from (select rownum as rnum, a.* from (select * from vwBoard %s order by thread desc) a) where rnum between %s and %s order by thread desc", where, map.get("begin"), map.get("end"));
 			
 			rs = stat.executeQuery(sql);
 			
@@ -94,7 +97,9 @@ public class BoardDAO {
 				
 				dto.setIsnew(rs.getDouble("isnew"));
 				
-				dto.setCommentcount(rs.getInt("commentcount"));				
+				dto.setCommentcount(rs.getInt("commentcount"));		
+				
+				dto.setDepth(rs.getInt("depth"));
 				
 				list.add(dto);
 			}
@@ -133,6 +138,9 @@ public class BoardDAO {
 				dto.setRegdate(rs.getString("regdate"));
 				dto.setReadcount(rs.getInt("readcount"));
 				dto.setUserip(rs.getString("userip"));
+				
+				dto.setThread(rs.getInt("thread"));
+				dto.setDepth(rs.getInt("depth"));
 				
 				return dto;
 			}
@@ -335,6 +343,47 @@ public class BoardDAO {
 		}
 		
 		return 0;
+		
+	}
+
+	//AddOk 서블릿이 게시판에서 가장 큰 thread+1000 값을 주세요~
+	public int getMaxThread() {
+		
+		try {
+
+			String sql = "select nvl(max(thread), 0) + 1000 as thread from tblBoard";
+			rs = stat.executeQuery(sql);
+			
+			if (rs.next()) {
+				return rs.getInt("thread");
+			}
+
+		} catch (Exception e) {
+			System.out.println("BoardDAO.getMaxThread()");
+			e.printStackTrace();
+		}
+		
+		return 0;
+	}
+
+	//AddOk 서블릿이 계층형 처리를 위해 요청
+	public void updateThread(HashMap<String, Integer> map) {
+		
+		try {
+
+			String sql = "update tblBoard set thread = thread - 1 where thread > ? and thread < ?";
+			
+			pstat = conn.prepareStatement(sql);
+			
+			pstat.setInt(1, map.get("previousThread"));
+			pstat.setInt(2, map.get("parentThread"));
+			
+			pstat.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println("BoardDAO.updateThread()");
+			e.printStackTrace();
+		}
 		
 	}
 	

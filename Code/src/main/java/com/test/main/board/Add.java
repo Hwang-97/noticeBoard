@@ -25,6 +25,14 @@ public class Add extends HttpServlet {
 		
 		
 		//할일
+		//add.do?reply=1&thread=3000&depth=0
+		String reply = req.getParameter("reply");
+		String thread = req.getParameter("thread");
+		String depth = req.getParameter("depth");
+		
+		req.setAttribute("reply", reply);
+		req.setAttribute("thread", thread);
+		req.setAttribute("depth", depth);
 
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/board/add.jsp");
 		dispatcher.forward(req, resp);

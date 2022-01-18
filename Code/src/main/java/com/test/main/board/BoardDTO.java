@@ -16,6 +16,22 @@ public class BoardDTO {
 	
 	private int commentcount; //댓글 갯수
 	
+	private int thread; //계층형
+	private int depth;
+	
+	public int getThread() {
+		return thread;
+	}
+	public void setThread(int thread) {
+		this.thread = thread;
+	}
+	public int getDepth() {
+		return depth;
+	}
+	public void setDepth(int depth) {
+		this.depth = depth;
+	}
+	
 	public int getCommentcount() {
 		return commentcount;
 	}

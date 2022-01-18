@@ -46,11 +46,16 @@
 					class="btn btn-default"
 					onclick="location.href='/code/board/list.do?column=${column}&word=${word}&page=${page}';">
 				
+				<c:if test="${not empty id}">
+				<input type="button" value="답변쓰기"
+					class="btn btn-primary"
+					onclick="location.href='/code/board/add.do?reply=1&thread=${dto.thread}&depth=${dto.depth}';">	
+				</c:if>
+				
 				<c:if test="${not empty id && dto.id == id}">
 				<input type="button" value="수정하기"
 					class="btn btn-primary"
 					onclick="location.href='/code/board/edit.do?seq=${dto.seq}';">
-				
 				<input type="button" value="삭제하기"
 					class="btn btn-primary"
 					onclick="location.href='/code/board/del.do?seq=${dto.seq}';">

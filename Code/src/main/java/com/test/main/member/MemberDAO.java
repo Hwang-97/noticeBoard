@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import com.test.jdbc.DBUtil;
 
@@ -86,6 +87,59 @@ public class MemberDAO {
 		}
 		
 		return 0;
+	}
+
+	public int getCcount(String id) {
+		try {
+
+			String sql = "select count(*) as cnt from tblComment where id = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, id);
+			
+			rs = pstat.executeQuery();
+			
+			if (rs.next()) {
+				return rs.getInt("cnt");
+			}
+
+		} catch (Exception e) {
+			System.out.println("MemberDAO.getCount()");
+			e.printStackTrace();
+		}
+		
+		return 0;
+	}
+
+	public ArrayList<MemberDTO> list() {
+		
+		try {
+
+			String sql = "select tblUser.*, (select count(*) from tblBoard where id = tblUser.id) as count, (select count(*) from tblComment where id = tblUser.id) as ccount from tblUser order by lv desc, name asc";
+			
+			ArrayList<MemberDTO> list = new ArrayList<MemberDTO>();
+			
+			rs = stat.executeQuery(sql);
+			
+			while (rs.next()) {
+				MemberDTO dto = new MemberDTO();
+				
+				dto.setId(rs.getString("id"));
+				dto.setName(rs.getString("name"));
+				dto.setLv(rs.getString("lv"));
+				dto.setCount(rs.getInt("count"));
+				dto.setCcount(rs.getInt("ccount"));
+				
+				list.add(dto);
+			}
+			return list;
+
+		} catch (Exception e) {
+			System.out.println("MemberDAO.list()");
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 }

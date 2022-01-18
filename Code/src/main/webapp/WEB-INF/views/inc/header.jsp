@@ -19,7 +19,7 @@
 		<li onclick="location.href='/code/main.do';">Home</li>
 		<li onclick="location.href='/code/board/list.do';">Board</li>
 		<li onclick="location.href='/code/member/member.do';">Member</li>
-		<li onclick="location.href='/code/etc/?';">Etc</li>
+		<li onclick="location.href='/code/etc/etc.do';">Etc</li>
 	</ul>
 
 </header>

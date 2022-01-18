@@ -43,7 +43,7 @@
 					<div class="info">
 						<div><span class="label label-primary">lv${lv}</span> ${id}(${name})</div>
 						<div style="margin-top:10px;">작성한 게시물수: ${count}개</div>
-						<div>작성한 댓글수: 0개</div>
+						<div>작성한 댓글수: ${ccount}개</div>
 					</div>
 					
 					<input type="button" value="로그아웃"

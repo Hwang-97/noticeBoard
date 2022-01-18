@@ -7,6 +7,21 @@ public class MemberDTO {
 	private String name;
 	private String lv;
 	
+	private int count;
+	private int ccount;
+	
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
+	public int getCcount() {
+		return ccount;
+	}
+	public void setCcount(int ccount) {
+		this.ccount = ccount;
+	}
 	public String getId() {
 		return id;
 	}
